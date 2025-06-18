@@ -1,6 +1,5 @@
 package com.taskflow.dto;
 
-import com.taskflow.model.User;
 
 public class TaskDTO {
 
