@@ -59,3 +59,4 @@ src
 ### ✍️ Author
 Zain Morshed
 https://www.linkedin.com/in/zain-morshed/
+zainmorshed@gmail.com
