@@ -1,0 +1,28 @@
+#This file orchestrates multiple containers — like your app and a database — into a single setup.
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15 #✅ This pulls a pre-made image of PostgreSQL version 15.
+    environment: # ✅ These define the initial database name, username, and password.
+      POSTGRES_DB: taskflow_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432" #Exposes PostgreSQL to your local machine (host) on port 5432.
+    volumes:
+      - pgdata:/var/lib/postgresql/data #Ensures your database data is saved between runs (persistent volume).
+
+  app:
+    build: . #Tells Docker to build your app using the Dockerfile in the current directory (.).
+    ports:
+      - "8080:8080" #Exposes your app on port 8080 (Spring Boot default).
+    depends_on:
+      - db #Makes sure the db (PostgreSQL) service is started before the app.
+    environment: #Injects environment variables that your Spring app uses (from application.properties).
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/taskflow_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: password
+
+volumes: #Named volume (pgdata) that persists your database even if the container is destroyed.
+  pgdata:
